@@ -226,6 +226,31 @@
         <!-- <delete file="build/enumtest.jar"/> -->
     </target>
 
+    <target name="test-resources" depends="compile">
+        <delete file="build/org.springframework.web.servlet.jar"/>
+        <jarjar jarfile="build/org.springframework.web.servlet.jar" verbose="true">
+            <zipfileset src="src/test/org.springframework.web.servlet-3.1.0.RELEASE.jar"/>
+            <rule pattern="org.springframework.web.servlet.**" result="com.test.dotcms.jarjar.@1"/>
+        </jarjar>
+    </target>
+
+    <target name="test-services" depends="compile">
+        <delete file="build/elasticsearch-0.90.3.jar"/>
+        <jarjar jarfile="build/elasticsearch.jar" verbose="true">
+            <zipfileset src="src/test/elasticsearch-0.90.3.jar"/>
+            <rule pattern="com.fasterxml.jackson.core.**" result="com.test.dotcms.jarjar.core.@1"/>
+        </jarjar>
+    </target>
+
+    <target name="test-services-xerces" depends="compile">
+        <delete file="build/xercesImpl.jar"/>
+        <jarjar jarfile="build/xerces.jar" verbose="true">
+            <zipfileset src="src/test/xercesImpl.jar"/>
+            <rule pattern="org.apache.xerces.jaxp.**" result="com.test.dotcms.jarjar.jaxp.@1"/>
+            <rule pattern="org.apache.xerces.dom.**" result="com.test.dotcms.jarjar.dom.@1"/>
+        </jarjar>
+    </target>
+
     <target name="test-manifest" depends="compile">
         <delete>
             <fileset dir="build" includes="manifest*.jar"/>
