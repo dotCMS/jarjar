@@ -16,14 +16,14 @@
 
 package com.tonicsystems.jarjar;
 
-import com.tonicsystems.jarjar.util.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import com.tonicsystems.jarjar.util.AntJarProcessor;
 import org.apache.tools.ant.BuildException;
 
-public class JarJarTask extends AntJarProcessor
-{
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class JarJarTask extends AntJarProcessor {
     private List<PatternElement> patterns = new ArrayList<PatternElement>();
 
     public void addConfiguredRule(Rule rule) {
@@ -45,7 +45,7 @@ public class JarJarTask extends AntJarProcessor
     }
 
     public void execute() throws BuildException {
-        MainProcessor proc = new MainProcessor(patterns, verbose, false);
+        MainProcessor proc = new MainProcessor(patterns, verbose, false, renameServices);
         execute(proc);
         try {
             proc.strip(getDestFile());
@@ -58,4 +58,5 @@ public class JarJarTask extends AntJarProcessor
         super.cleanHelper();
         patterns.clear();
     }
+
 }

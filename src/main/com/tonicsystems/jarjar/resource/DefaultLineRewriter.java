@@ -17,7 +17,8 @@ public class DefaultLineRewriter implements LineRewriter {
     }
 
     public boolean accepts(EntryStruct struct) {
-        return !struct.name.endsWith(".class") && !struct.name.endsWith(".java") && !struct.name.endsWith("MANIFEST.MF");
+        //TODO: No sure about this, but for now only accept files with extensions
+        return !struct.name.endsWith(".class") && !struct.name.endsWith(".java") && !struct.name.endsWith("MANIFEST.MF") && struct.name.contains(".");
     }
 
     public String replaceLine(String line) {
@@ -28,6 +29,11 @@ public class DefaultLineRewriter implements LineRewriter {
             }
         }
         return line;
+    }
+
+    @Override
+    public List<MatchableRule> getRules() {
+        return rules;
     }
 
 }

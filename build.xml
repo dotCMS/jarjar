@@ -251,6 +251,34 @@
         </jarjar>
     </target>
 
+    <target name="test-services-rename-false" depends="compile">
+        <delete file="build/jersey.jar"/>
+        <jarjar jarfile="build/jersey.jar" verbose="true">
+            <zipfileset src="src/test/jersey-server-1.12.jar"/>
+            <rule pattern="com.sun.jersey.spi.container.**" result="com.test.dotcms.jarjar.jersey.@1"/>
+            <rule pattern="com.sun.jersey.server.impl.container.**" result="com.test.dotcms.jarjar.XXXXX.@1"/>
+        </jarjar>
+    </target>
+
+    <target name="test-services-rename-true" depends="compile">
+        <delete file="build/jersey.jar"/>
+        <jarjar jarfile="build/jersey.jar" verbose="true" renameservices="true">
+            <zipfileset src="src/test/jersey-server-1.12.jar"/>
+            <rule pattern="com.sun.jersey.spi.container.**" result="com.test.dotcms.jarjar.jersey.@1"/>
+            <rule pattern="com.sun.jersey.server.impl.container.**" result="com.test.dotcms.jarjar.XXXXX.@1"/>
+        </jarjar>
+    </target>
+
+    <target name="test-services-unify" depends="compile">
+        <delete file="build/jersey-unify.jar"/>
+        <jarjar jarfile="build/jersey-unify.jar" verbose="true" renameservices="true">
+            <zipfileset src="src/test/jersey-multipart-1.12.jar"/>
+            <zipfileset src="src/test/jersey-server-1.12.jar"/>
+            <rule pattern="com.sun.jersey.spi.container.**" result="com.test.dotcms.jarjar.jersey.@1"/>
+            <rule pattern="com.sun.jersey.server.impl.container.**" result="com.test.dotcms.jarjar.XXXXX.@1"/>
+        </jarjar>
+    </target>
+
     <target name="test-manifest" depends="compile">
         <delete>
             <fileset dir="build" includes="manifest*.jar"/>

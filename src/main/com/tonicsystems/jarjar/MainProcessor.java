@@ -25,14 +25,17 @@ import java.io.IOException;
 import java.util.*;
 
 class MainProcessor implements JarProcessor {
+
     private final boolean verbose;
+    private final boolean renameServices;
     private final JarProcessorChain chain;
     private final KeepProcessor kp;
     private final Map<String, String> renames = new HashMap<String, String>();
 
-    public MainProcessor(List<PatternElement> patterns, boolean verbose, boolean skipManifest) {
+    public MainProcessor(List<PatternElement> patterns, boolean verbose, boolean skipManifest, boolean renameServices) {
 
         this.verbose = verbose;
+        this.renameServices = renameServices;
         List<Zap> zapList = new ArrayList<Zap>();
         List<Rule> ruleList = new ArrayList<Rule>();
         List<Keep> keepList = new ArrayList<Keep>();
@@ -58,7 +61,7 @@ class MainProcessor implements JarProcessor {
         processors.add(new ZapProcessor(zapList));
         processors.add(new JarTransformerChain(new RemappingClassTransformer[]{new RemappingClassTransformer(pr)}));
         processors.add(new ResourceProcessor(pr));
-        processors.add(new ResourceRewriter(new DefaultLineRewriter(ruleList), verbose));
+        processors.add(new ResourceRewriter(new DefaultLineRewriter(ruleList), verbose, renameServices));
         chain = new JarProcessorChain(processors.toArray(new JarProcessor[processors.size()]));
     }
 
@@ -107,4 +110,5 @@ class MainProcessor implements JarProcessor {
         }
         return keepIt;
     }
+
 }
