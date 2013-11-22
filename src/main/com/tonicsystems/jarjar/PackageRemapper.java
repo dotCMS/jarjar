@@ -56,6 +56,9 @@ class PackageRemapper extends Remapper
     }
 
     public String mapPath(String path) {
+
+        boolean addedSlash = false;
+
         String s = pathCache.get(path);
         if (s == null) {
             s = path;
@@ -65,6 +68,13 @@ class PackageRemapper extends Remapper
                 end = s;
                 s = RESOURCE_SUFFIX;
             } else {
+
+                if (slash != (s.length() - 1) && !s.contains(".")) {
+                    s += "/";
+                    slash = s.length() - 1;
+                    addedSlash = true;
+                }
+
                 end = s.substring(slash + 1);
                 s = s.substring(0, slash + 1) + RESOURCE_SUFFIX;
             }
@@ -76,7 +86,13 @@ class PackageRemapper extends Remapper
             if (absolute) s = "/" + s;
             if (s.indexOf(RESOURCE_SUFFIX) < 0)
               return path;
-            s = s.substring(0, s.length() - RESOURCE_SUFFIX.length()) + end;
+
+            int toRemove = RESOURCE_SUFFIX.length();
+            if (addedSlash) {
+                toRemove += 1;
+            }
+
+            s = s.substring(0, s.length() - toRemove) + end;
             pathCache.put(path, s);
         }
         return s;

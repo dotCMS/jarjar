@@ -16,7 +16,7 @@
 
 package com.tonicsystems.jarjar;
 
-import com.tonicsystems.jarjar.resource.DefaultLineRewriter;
+import com.tonicsystems.jarjar.resource.DefaultContentRewriter;
 import com.tonicsystems.jarjar.resource.ResourceRewriter;
 import com.tonicsystems.jarjar.util.*;
 
@@ -61,7 +61,7 @@ class MainProcessor implements JarProcessor {
         processors.add(new ZapProcessor(zapList));
         processors.add(new JarTransformerChain(new RemappingClassTransformer[]{new RemappingClassTransformer(pr)}));
         processors.add(new ResourceProcessor(pr));
-        processors.add(new ResourceRewriter(new DefaultLineRewriter(ruleList), verbose, renameServices));
+        processors.add(new ResourceRewriter(new DefaultContentRewriter(ruleList), verbose, renameServices));
         chain = new JarProcessorChain(processors.toArray(new JarProcessor[processors.size()]));
     }
 

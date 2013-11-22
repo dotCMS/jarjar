@@ -3,15 +3,15 @@ package com.tonicsystems.jarjar.resource;
 import com.tonicsystems.jarjar.util.EntryStruct;
 import com.tonicsystems.jarjar.util.JarProcessor;
 
-import java.io.*;
+import java.io.IOException;
 
 public class ResourceRewriter implements JarProcessor {
 
-    private final LineRewriter input;
+    private final ContentRewriter input;
     private final boolean verbose;
     private final boolean renameServices;
 
-    public ResourceRewriter(LineRewriter input, boolean verbose, boolean renameServices) {
+    public ResourceRewriter(ContentRewriter input, boolean verbose, boolean renameServices) {
         this.input = input;
         this.verbose = verbose;
         this.renameServices = renameServices;
@@ -23,23 +23,12 @@ public class ResourceRewriter implements JarProcessor {
 
             //We must rename as well the services files and not just modify it contents
             if (renameServices && struct.name.contains("META-INF/services/")) {
-                struct.name = input.replaceLine(struct.name);
+                struct.name = input.replace(struct.name);
             }
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(struct.data)));
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            PrintStream printer = new PrintStream(out);
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String replacement = input.replaceLine(line);
-                if (!replacement.equals(line) && verbose) {
-                    System.out.println("Updating file: " + struct.name + ". Replacement: " + replacement);
-                }
-                printer.println(replacement);
-            }
-            reader.close();
-            printer.close();
-            struct.data = out.toByteArray();
+            //Reading the file to check
+            String fileContent = input.replace(new String(struct.data));
+            struct.data = fileContent.getBytes();
         }
         return true;
     }

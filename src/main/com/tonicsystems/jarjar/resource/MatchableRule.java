@@ -20,10 +20,24 @@ public class MatchableRule {
     }
 
     public String replace(String input) {
-        String p = pattern.replaceAll("\\.", "\\\\.").replaceAll("\\*\\*", "([\\\\w\\\\d_\\\\\\$]*)");
+
+        String pattern = this.pattern.replaceAll("\\.", "\\\\.").replaceAll("\\*\\*", "([\\\\w\\\\d_\\\\\\$]*)");
         String replacement = this.replacement.replaceAll("@1", "\\$1");
-        Matcher m = Pattern.compile(p).matcher(input);
-        return m.replaceAll(replacement);
+        String output = replaceAll(input, pattern, replacement);
+
+        pattern = this.pattern.replaceAll("\\.", "/").replaceAll("\\*\\*", "([\\\\w\\\\d_\\\\\\$]*)");
+        replacement = this.replacement.replaceAll("\\.", "/").replaceAll("@1", "\\$1");
+        output = replaceAll(output, pattern, replacement);
+
+        return output;
+    }
+
+    private String replaceAll(String input, String pattern, String replacement) {
+
+        pattern = "(?<!\\.)" + pattern;
+
+        Matcher matcher = Pattern.compile(pattern).matcher(input);
+        return matcher.replaceAll(replacement);
     }
 
 }

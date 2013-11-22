@@ -16,13 +16,12 @@
 
 package com.tonicsystems.jarjar;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 import java.util.Collections;
 
 public class PackageRemapperTest
-extends TestCase
-{
+        extends TestCase {
     protected PackageRemapper remapper;
 
     protected void setUp() {
@@ -33,24 +32,36 @@ extends TestCase
     }
 
     public void testMapValue() {
-      assertUnchangedValue("[^\\s;/@&=,.?:+$]");
-      assertUnchangedValue("[Ljava/lang/Object;");
-      assertUnchangedValue("[Lorg/example/Object;");
-      assertUnchangedValue("[Ljava.lang.Object;");
-      assertUnchangedValue("[Lorg.example/Object;");
-      assertUnchangedValue("[L;");
-      assertUnchangedValue("[Lorg.example.Object;;");
-      assertUnchangedValue("[Lorg.example.Obj ct;");
-      assertUnchangedValue("org.example/Object");
+        assertUnchangedValue("[^\\s;/@&=,.?:+$]");
+        assertUnchangedValue("[Ljava/lang/Object;");
+        assertUnchangedValue("[Lorg/example/Object;");
+        assertUnchangedValue("[Ljava.lang.Object;");
+        assertUnchangedValue("[Lorg.example/Object;");
+        assertUnchangedValue("[L;");
+        assertUnchangedValue("[Lorg.example.Object;;");
+        assertUnchangedValue("[Lorg.example.Obj ct;");
+        assertUnchangedValue("org.example/Object");
 
-      assertEquals("[Lfoo.example.Object;", remapper.mapValue("[Lorg.example.Object;"));
-      assertEquals("foo.example.Object", remapper.mapValue("org.example.Object"));
-      assertEquals("foo/example/Object", remapper.mapValue("org/example/Object"));
-      assertEquals("foo/example.Object", remapper.mapValue("org/example.Object")); // path match
+        assertEquals("[Lfoo.example.Object;", remapper.mapValue("[Lorg.example.Object;"));
+        assertEquals("foo.example.Object", remapper.mapValue("org.example.Object"));
+        assertEquals("foo/example/Object", remapper.mapValue("org/example/Object"));
+        assertEquals("foo/example.Object", remapper.mapValue("org/example.Object")); // path match
 
-      assertEquals("foo.example.package-info", remapper.mapValue("org.example.package-info"));
-      assertEquals("foo/example/package-info", remapper.mapValue("org/example/package-info"));
-      assertEquals("foo/example.package-info", remapper.mapValue("org/example.package-info"));
+        assertEquals("foo.example.package-info", remapper.mapValue("org.example.package-info"));
+        assertEquals("foo/example/package-info", remapper.mapValue("org/example/package-info"));
+        assertEquals("foo/example.package-info", remapper.mapValue("org/example.package-info"));
+    }
+
+    public void testDwrValue() {
+
+        Rule rule = new Rule();
+        rule.setPattern("org.directwebremoting.**");
+        rule.setResult("com.dotcms.repackage.dwr_3rc2modified.org.directwebremoting.@1");
+        PackageRemapper packageRemapper = new PackageRemapper(Collections.singletonList(rule), false);
+
+        assertEquals("/com/dotcms/repackage/dwr_3rc2modified/org/directwebremoting/dwr.xml", packageRemapper.mapValue("/org/directwebremoting/dwr.xml"));
+        assertEquals("/com/dotcms/repackage/dwr_3rc2modified/org/directwebremoting", packageRemapper.mapValue("/org/directwebremoting"));
+        assertEquals("com/dotcms/repackage/dwr_3rc2modified/org/directwebremoting/spring/spring-dwr-3.0.xsd", packageRemapper.mapValue("org/directwebremoting/spring/spring-dwr-3.0.xsd"));
     }
 
     private void assertUnchangedValue(String value) {

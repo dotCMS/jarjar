@@ -7,13 +7,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DefaultLineRewriter implements LineRewriter {
+public class DefaultContentRewriter implements ContentRewriter {
 
     private List<String> allowedFiles = new ArrayList<String>();
 
     private final List<MatchableRule> rules = new LinkedList<MatchableRule>();
 
-    public DefaultLineRewriter(List<Rule> ruleList) {
+    public DefaultContentRewriter(List<Rule> ruleList) {
+
         for (Rule rule : ruleList) {
             rules.add(new MatchableRule(rule));
         }
@@ -45,14 +46,14 @@ public class DefaultLineRewriter implements LineRewriter {
         return false;
     }
 
-    public String replaceLine(String line) {
+    public String replace(String content) {
+
+        String replacement = content;
         for (MatchableRule rule : rules) {
-            String replacement = rule.replace(line);
-            if (!replacement.equals(line)) {
-                return replacement;
-            }
+            replacement = rule.replace(replacement);
         }
-        return line;
+
+        return replacement;
     }
 
     @Override
