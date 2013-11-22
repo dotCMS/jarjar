@@ -29,7 +29,7 @@ public class MatchableRuleTest {
 
         matches("org", "org");
         matches("org.", "jarjar.org.");
-        //matches("xorg.foo", "xjarjar.org.foo");
+        matches("xorg.foo", "xjarjar.org.foo");
 
         matches("org.foo2,org.bar1", "jarjar.org.foo2,jarjar.org.bar1");
         matches("org.foo$1,org.bar_x hey", "jarjar.org.foo$1,jarjar.org.bar_x hey");
