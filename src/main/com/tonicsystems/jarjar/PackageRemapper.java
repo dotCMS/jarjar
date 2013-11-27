@@ -135,10 +135,11 @@ class PackageRemapper extends Remapper
 
     private String replaceHelper(String value) {
         for (Wildcard wildcard : wildcards) {
-            String test = wildcard.replace(value);
+            String test = wildcard.replace(value, false);
             if (test != null)
                 return test;
         }
         return value;
     }
+
 }

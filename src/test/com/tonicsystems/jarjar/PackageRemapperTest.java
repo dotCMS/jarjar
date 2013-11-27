@@ -64,6 +64,16 @@ public class PackageRemapperTest
         assertEquals("com/dotcms/repackage/dwr_3rc2modified/org/directwebremoting/spring/spring-dwr-3.0.xsd", packageRemapper.mapValue("org/directwebremoting/spring/spring-dwr-3.0.xsd"));
     }
 
+    public void testJnaValue() {
+
+        Rule rule = new Rule();
+        rule.setPattern("com.sun.jna.**");
+        rule.setResult("com.dotcms.repackage.jna.com.sun.jna.@1");
+        PackageRemapper packageRemapper = new PackageRemapper(Collections.singletonList(rule), false);
+
+        assertEquals("com/dotcms/repackage/jna/com/sun/jna/linux-amd64/libjnidispatch.so", packageRemapper.mapValue("com/sun/jna/linux-amd64/libjnidispatch.so"));
+    }
+
     private void assertUnchangedValue(String value) {
         assertEquals(value, remapper.mapValue(value));
     }

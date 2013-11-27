@@ -98,7 +98,11 @@ class Wildcard
     }
 
     public String replace(String value) {
-        Matcher matcher = getMatcher(value);
+        return replace(value, true);
+    }
+
+    public String replace(String value, Boolean onlyValidJavaIdentifiers) {
+        Matcher matcher = getMatcher(value, onlyValidJavaIdentifiers);
         if (matcher != null) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < strings.length; i++)
@@ -109,9 +113,20 @@ class Wildcard
     }
 
     private Matcher getMatcher(String value) {
+        return getMatcher(value, true);
+    }
+
+    private Matcher getMatcher(String value, Boolean onlyValidJavaIdentifiers) {
         Matcher matcher = pattern.matcher(value);
-        if (matcher.matches() && checkIdentifierChars(value, "/"))
-            return matcher;
+
+        if (onlyValidJavaIdentifiers) {
+            if (matcher.matches() && checkIdentifierChars(value, "/"))
+                return matcher;
+        } else {
+            if (matcher.matches())
+                return matcher;
+        }
+
         return null;
     }
 
