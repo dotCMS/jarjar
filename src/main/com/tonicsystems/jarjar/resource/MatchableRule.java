@@ -22,14 +22,18 @@ public class MatchableRule {
     public String replace(String input) {
 
         //xxx.yyy.zzzz
-        String pattern = this.pattern.replaceAll("\\.", "\\\\.").replaceAll("\\*\\*", "([\\\\w\\\\d_\\\\\\$]*)");
+        String pattern = this.pattern.replaceAll("\\.", "\\\\.");
+        pattern = pattern.replaceAll("\\.\\*\\*", "\\.([\\\\w\\\\d_\\\\\\$]*)");
+        pattern = pattern.replaceAll("\\.\\*", "\\.([\\\\w\\\\d_\\\\\\$]*)");
         String replacement = this.replacement.replaceAll("@1", "\\$1");
 
         pattern = "(?<!\\.)" + pattern;
         String output = replaceAll(input, pattern, replacement);
 
         //xxx/yyy/zzzz
-        pattern = this.pattern.replaceAll("\\.", "/").replaceAll("\\*\\*", "([\\\\w\\\\d_\\\\\\$]*)");
+        pattern = this.pattern.replaceAll("\\.", "/");
+        pattern = pattern.replaceAll("/\\*\\*", "/([\\\\w\\\\d_\\\\\\$]*)");
+        pattern = pattern.replaceAll("/\\*", "/([\\\\w\\\\d_\\\\\\$]*)");
         replacement = this.replacement.replaceAll("\\.", "/").replaceAll("@1", "\\$1");
 
         pattern = "(?<=\\B/|(?<!/))" + pattern;

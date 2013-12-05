@@ -36,8 +36,8 @@ class Wildcard
     public Wildcard(String pattern, String result) {
         if (pattern.equals("**"))
             throw new IllegalArgumentException("'**' is not a valid pattern");
-        if (!checkIdentifierChars(pattern, "/*"))
-            throw new IllegalArgumentException("Not a valid package pattern: " + pattern);
+        /*if (!checkIdentifierChars(pattern, "*//*"))
+            throw new IllegalArgumentException("Not a valid package pattern: " + pattern);*/
         if (pattern.indexOf("***") >= 0)
             throw new IllegalArgumentException("The sequence '***' is invalid in a package pattern");
         
