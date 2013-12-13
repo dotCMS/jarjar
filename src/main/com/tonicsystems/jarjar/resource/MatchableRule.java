@@ -36,7 +36,7 @@ public class MatchableRule {
             pattern = pattern.replaceAll("\\.\\*\\*", "\\.([\\\\w\\\\d_\\\\\\$]*)");
         }
 
-        pattern = "(?<!\\.)" + pattern;
+        pattern = "(?<![\\.-])" + pattern;
         String output = replaceAll(input, pattern, replacement);
 
         //xxx/yyy/zzzz
@@ -45,7 +45,7 @@ public class MatchableRule {
         if (strict) {
             pattern = pattern.replaceAll("/\\*", "(/((?![\\\\w\\\\d_\\\\\\$]*/))|(?![\\\\w/]))");
             replacement = replacement.replaceAll("/\\$1", "\\$1");
-            pattern = "(?<![\\./\\w])" + pattern;
+            pattern = "(?<![\\./\\w-])" + pattern;
         } else {
             pattern = pattern.replaceAll("/\\*\\*", "/([\\\\w\\\\d_\\\\\\$]*)");
             pattern = "(?<=\\B/|(?<!/))" + pattern;

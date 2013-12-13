@@ -95,6 +95,9 @@ public class MatchableRuleTest {
                 "http://www.directwebremoting.org.schema.spring-dwr.spring-dwr-3.0.xsd=com.dotcms.repackage.dwr_3rc2modified.org.directwebremoting.spring.spring-dwr-3.0.xsd");
         matches("http://www.directwebremoting.org/schema/spring-dwr/spring-dwr-3.0.xsd=com/dotcms/repackage/dwr_3rc2modified/org/directwebremoting/spring/spring-dwr-3.0.xsd",
                 "http://www.directwebremoting.org/schema/spring-dwr/spring-dwr-3.0.xsd=com/dotcms/repackage/dwr_3rc2modified/org/directwebremoting/spring/spring-dwr-3.0.xsd");
+
+        rule = new MatchableRule("config.*", "com.dotcms.repackage.elasticsearch.config.@1");
+        matches("<struts-config>", "<struts-config>");
     }
 
     private void matches(String input, String match) {
