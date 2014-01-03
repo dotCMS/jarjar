@@ -25,6 +25,7 @@ public class DefaultContentRewriter implements ContentRewriter {
         allowedFiles.add(".properties");
         allowedFiles.add(".conf");
         allowedFiles.add(".txt");
+        allowedFiles.add(".tasks");
     }
 
     public boolean accepts(EntryStruct struct) {
