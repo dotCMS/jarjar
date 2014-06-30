@@ -16,12 +16,14 @@
 
 package com.tonicsystems.jarjar;
 
-import com.tonicsystems.jarjar.util.*;
-import java.io.IOException;
-import java.util.*;
+import com.tonicsystems.jarjar.util.EntryStruct;
+import com.tonicsystems.jarjar.util.JarProcessor;
 
-class ResourceProcessor implements JarProcessor
-{
+import java.io.IOException;
+
+class ResourceProcessor implements JarProcessor {
+
+    public static final String TEMP_EXTENSION = "jarjarTemp";
     private PackageRemapper pr;
 
     public ResourceProcessor(PackageRemapper pr) {
@@ -29,9 +31,29 @@ class ResourceProcessor implements JarProcessor
     }
 
     public boolean process(EntryStruct struct) throws IOException {
-        if (!struct.name.endsWith(".class"))
-            struct.name = pr.mapPath(struct.name);
+
+        if ( !struct.name.endsWith( ".class" ) ) {
+
+            /*
+            If we found a file without extension lets add it a temporal one in order
+            to be replaced properly by the PackageRemapper preventing the file to be confused with a directory.
+             */
+            Boolean addedExtension = false;
+            int slash = struct.name.lastIndexOf( '/' );
+            if ( !struct.isDirectory && slash != (struct.name.length() - 1) && !struct.name.contains( "." ) ) {
+                struct.name += "." + TEMP_EXTENSION;
+                addedExtension = true;
+            }
+
+            //Replace the path
+            struct.name = pr.mapPath( struct.name );
+
+            //Remove the temp extension if added
+            if ( addedExtension ) {
+                struct.name = struct.name.replace( "." + TEMP_EXTENSION, "" );
+            }
+        }
         return true;
     }
+
 }
-    

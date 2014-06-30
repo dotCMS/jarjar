@@ -16,12 +16,11 @@
 
 package com.tonicsystems.jarjar.util;
 
-import java.io.InputStream;
-import java.io.File;
+public class EntryStruct {
 
-public class EntryStruct
-{
     public byte[] data;
     public String name;
     public long time;
+    public boolean isDirectory;
+
 }

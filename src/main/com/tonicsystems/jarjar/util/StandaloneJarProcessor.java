@@ -41,6 +41,7 @@ public class StandaloneJarProcessor
                 struct.time = entry.getTime();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 IoUtil.pipe(in.getInputStream(entry), baos, buf);
+                struct.isDirectory = entry.isDirectory();
                 struct.data = baos.toByteArray();
                 if (proc.process(struct)) {
                     if (entries.add(struct.name)) {

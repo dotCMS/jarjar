@@ -17,6 +17,7 @@
 package com.tonicsystems.jarjar;
 
 import com.tonicsystems.jarjar.resource.DefaultContentRewriter;
+import com.tonicsystems.jarjar.resource.ManifestRewriter;
 import com.tonicsystems.jarjar.resource.ResourceRewriter;
 import com.tonicsystems.jarjar.util.*;
 
@@ -53,8 +54,11 @@ class MainProcessor implements JarProcessor {
         kp = keepList.isEmpty() ? null : new KeepProcessor(keepList);
 
         List<JarProcessor> processors = new ArrayList<JarProcessor>();
-        if (skipManifest)
-            processors.add(ManifestProcessor.getInstance());
+        if ( !skipManifest ) {
+            processors.add( new ResourceRewriter( new ManifestRewriter( ruleList ), verbose ) );
+        } else {
+            processors.add( ManifestProcessor.getInstance() );
+        }
         if (kp != null)
             processors.add(kp);
 
