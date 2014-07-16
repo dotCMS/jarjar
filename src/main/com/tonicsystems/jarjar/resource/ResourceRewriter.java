@@ -17,6 +17,12 @@ public class ResourceRewriter implements JarProcessor {
         this.renameServices = renameServices;
     }
 
+    public ResourceRewriter ( ContentRewriter input, boolean verbose ) {
+        this.input = input;
+        this.verbose = verbose;
+        this.renameServices = false;
+    }
+
     public boolean process(EntryStruct struct) throws IOException {
 
         if (input.accepts(struct)) {
